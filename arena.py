@@ -38,8 +38,8 @@ class Arena:
 
     def move_right(self):
         """
-
-        :return:
+        Move the current block towards the right.
+        :return: Result of the operation.
         """
         dummy = deepcopy(self.block)
         dummy.move_right(True)
@@ -49,6 +49,9 @@ class Arena:
         return result
 
     def move_left(self):
+        """
+        Move the current block to the left
+        """
         dummy = deepcopy(self.block)
         dummy.move_left(True)
         if self.conflict(dummy.mask()[1]):
@@ -57,6 +60,10 @@ class Arena:
         return result
 
     def rotate_cc(self):
+        """
+        Rotate the current block counter-clockwise
+        :return: The result of the operation.
+        """
         dummy = deepcopy(self.block)
         dummy.rotate_counter()
         if self.conflict(dummy.mask()[1]):
@@ -71,6 +78,9 @@ class Arena:
         return self.block.rotate_clockwise()
 
     def step(self):
+        """
+        Step the game one step forward. Also detect if current block is at end of decent.
+        """
         dummy_block = deepcopy(self.block)
         dummy_block.down()
         _, mask = dummy_block.mask()
@@ -85,6 +95,12 @@ class Arena:
             self.block = None
 
     def conflict(self, mask):
+        """
+        Check if there is a conflict with the current arena configuration and the proposed
+        block position
+        :param mask: The mask for the block.
+        :return: True if there is conflict, False otherwise.
+        """
         for i in range(20):
             for j in range(20):
                 if self.area[i][j] == 1 and mask[i][j] == 1:
@@ -92,6 +108,11 @@ class Arena:
         return False
 
     def merge(self, mask):
+        """
+        Merge the current arena configuration and the block position to get universal view.
+        :param mask: The mask to used to produce the final configuration.
+        :return: The final configuration as a 2 dimensional array.
+        """
         merged = [[0 for _ in range(20)] for _ in range(20)]
         for i in range(20):
             for j in range(20):
@@ -99,6 +120,10 @@ class Arena:
         return merged
 
     def reached_bottom(self):
+        """
+        Check if the block is at the bottom of the areana.
+        :return: The result of the check.
+        """
         if self.block.height + self.block.position[0] >= 20:
             return True
         else:
